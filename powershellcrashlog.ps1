@@ -100,14 +100,14 @@ function Collect-Specs {
     $ramSpeed = Get-WmiObject Win32_PhysicalMemory | Select-Object -ExpandProperty Speed
 
     # Write collected data to the file
-    specs "Username: $username"
-    specs "`nCPU: $cpuName, $cpuSpeed MHz"
-    specs "GPU: $gpu"
-    specs "Motherboard: $motherboardModel"
-    specs "BIOS: $biosVersion, $([System.Management.ManagementDateTimeConverter]::ToDateTime($biosDate))"
-    specs "`nOS: $osName $osVersion"
-    specs "System Uptime: $($uptime.Days) days, $($uptime.Hours) hours"
-    specs "RAM: $([math]::Round($installedMemory/1GB)) GB at $ramSpeed MT/s"
+    Add-Content -Path $infofile -Value "Username: $username"
+    Add-Content -Path $infofile -Value "`nCPU: $cpuName, $cpuSpeed MHz"
+    Add-Content -Path $infofile -Value "GPU: $gpu"
+    Add-Content -Path $infofile -Value "Motherboard: $motherboardModel"
+    Add-Content -Path $infofile -Value "BIOS: $biosVersion, $([System.Management.ManagementDateTimeConverter]::ToDateTime($biosDate))"
+    Add-Content -Path $infofile -Value "`nOS: $osName $osVersion"
+    Add-Content -Path $infofile -Value "System Uptime: $($uptime.Days) days, $($uptime.Hours) hours"
+    Add-Content -Path $infofile -Value "RAM: $([math]::Round($installedMemory/1GB)) GB at $ramSpeed MT/s"
 }
 
 # Function to collect installed programs
@@ -115,7 +115,7 @@ function Collect-Programs {
     $installedPrograms = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
                          Where-Object { $_.DisplayName } | Select-Object DisplayName
     $programs = $installedPrograms | Out-String
-    specs "`nInstalled Programs:`n $programs"
+    Add-Content -Path $infofile -Value "`nInstalled Programs:`n $programs"
 }
 
 # Function to collect event logs
@@ -146,7 +146,6 @@ function Compress-Files {
 function End-Script {
     Write-Host "Files are ready to be shared!"
     Start-Process explorer.exe -ArgumentList $File
-    $eofcomplete = $true
     $null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit
 }
