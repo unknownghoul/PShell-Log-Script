@@ -158,4 +158,12 @@ Collect-Specs
 Collect-Programs
 Collect-EventLogs
 Compress-Files
+
+
+# ------------------------------------------------------------
+# PowerShell Crash Log Script
+# Created by: [Rat's PC Cult]
+# ------------------------------------------------------------
+
+
 End-Script
